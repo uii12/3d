@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Xem mô hình hộp số 3D</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, Arial, sans-serif; background: #f3f5f8; color: #182230; }
+    header { padding: 16px 20px; text-align: center; }
+    h1 { margin: 0 0 6px; font-size: 21px; }
+    p { margin: 0; color: #586575; font-size: 14px; }
+    main { max-width: 1100px; margin: 0 auto; padding: 0 12px 18px; }
+    model-viewer { display:block; width:100%; height:min(76vh,760px); min-height:360px; background:white; border:1px solid #dce2e9; border-radius:14px; }
+    .help { text-align:center; padding:12px; font-size:14px; color:#586575; }
+    .actions { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; padding:0 0 16px; }
+    button { border:0; border-radius:9px; padding:10px 15px; background:#1f5fbf; color:white; font-size:14px; cursor:pointer; }
+    button.secondary { background:#526174; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mô hình hộp số 3D</h1>
+    <p>Kéo để xoay · Cuộn hoặc chụm hai ngón để phóng to/thu nhỏ</p>
+  </header>
+  <main>
+    <model-viewer id="viewer" camera-controls touch-action="pan-y"
+      auto-rotate auto-rotate-delay="1500" rotation-per-second="20deg"
+      shadow-intensity="1" exposure="1" environment-image="neutral"
+      alt="Mô hình hộp số 3D"></model-viewer>
+    <div class="help">Máy tính: giữ chuột trái để xoay, cuộn chuột để zoom. Điện thoại: vuốt để xoay, chụm hai ngón để zoom.</div>
+    <div class="actions">
+      <button onclick="resetView()">Đặt lại góc nhìn</button>
+      <button class="secondary" id="rotateBtn" onclick="toggleRotate()">Tắt tự xoay</button>
+      <button class="secondary" onclick="reloadModel()">Tải lại mô hình mới</button>
+    </div>
+  </main>
+  <script>
+    const viewer = document.getElementById('viewer');
+    function reloadModel() {
+      // Tham số thời gian giúp trình duyệt lấy GLB mới, tránh dùng bản cũ trong bộ nhớ đệm.
+      viewer.src = 'box_asm.glb?v=' + Date.now();
+    }
+    function resetView() {
+      viewer.resetTurntableRotation();
+      viewer.cameraOrbit = 'auto auto auto';
+    }
+    function toggleRotate() {
+      viewer.autoRotate = !viewer.autoRotate;
+      document.getElementById('rotateBtn').textContent =
+        viewer.autoRotate ? 'Tắt tự xoay' : 'Bật tự xoay';
+    }
+    reloadModel();
+  </script>
+</body>
+</html>
